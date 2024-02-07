@@ -11,7 +11,9 @@ public class Jumping : MonoBehaviour
     public bool isOnGround = true;
     private float _horizontalInput;
     private float _forwardInput;
+    private bool _isAatCheckpoint = false;
     private Vector3 _startingPosition;
+    private Vector3 _checkpointPosition;
     private Rigidbody _playerRigidbody;
 
 
@@ -37,7 +39,14 @@ public class Jumping : MonoBehaviour
 
         if(transform.position.y < OutOfBounds)
         {
-            transform.position = _startingPosition;
+            if(_isAatCheckpoint)
+            {
+                transform.position = _checkpointPosition;
+            }
+            else
+            {
+                transform.position = _startingPosition;
+            }
         }
     }
 
@@ -59,7 +68,13 @@ public class Jumping : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Checkpoint"))
         {
-            _startingPosition = other.gameObject.transform.position;
+            _isAatCheckpoint =true;
+            _checkpointPosition = other.gameObject.transform.position;
+        }
+        if(other.gameObject.CompareTag("EndPoint"))
+        {
+            _isAatCheckpoint = false;
+            transform.position = _startingPosition;
         }
     }
 }
